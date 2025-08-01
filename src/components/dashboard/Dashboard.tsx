@@ -51,6 +51,10 @@ const Dashboard = () => {
               </table>
             </div>
 
+            <p className="text-center success-green">
+              Level up on every 50 points.
+            </p>
+
             {/* Quiz Links */}
             <div className="text-center mt-4">
               <Link to='/quiz/Vocabulary' className="btn btn-primary btn-lg">
