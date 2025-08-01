@@ -3,7 +3,6 @@ import { useAuth } from "../../context/AuthContext"
 import { Link, useNavigate, useParams } from "react-router";
 import Unauthorized from "../layout/Unauthorized";
 import Spinner from "../layout/Spinner";
-import api from "../../api/api";
 
 const EditProfile = () => {
 

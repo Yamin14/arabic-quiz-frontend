@@ -54,6 +54,7 @@ export const AuthProvider = ({ children }: Props) => {
             } catch (error) {
                 console.error('Error fetching user:', error);
                 setUser(null);
+                setToken('0');
             } finally {
                 setLoading(false);
             }

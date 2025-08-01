@@ -76,10 +76,9 @@ const Register = () => {
                             <i className="fas fa-users"></i>{' '}
                             Class Code
                         </label>
-                        <select required name='classCode' onChange={handleSelectChange} className="select">
-                            <option disabled>Select Class Code</option>
+                        <select required name='classCode' defaultValue={classCode} onChange={handleSelectChange} className="select">
+                            <option value=''>Select Class Code</option>
                             <option value="B-3">B-3</option>
-                            <option value="B-3">B-4</option>
                         </select>
                     </div>
                     <button type="submit" className="btn btn-primary w-full mb-3">

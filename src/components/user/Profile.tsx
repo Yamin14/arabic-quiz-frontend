@@ -23,12 +23,6 @@ const Profile = () => {
 
     //current user
     const { user, logout } = useAuth();
-    const { deleteUser } = useUsers();
-
-    //logout
-    const handleLogout = () => {
-        logout();
-    }
 
     //fetch profile
     useEffect(() => {
