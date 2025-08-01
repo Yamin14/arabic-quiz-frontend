@@ -4,7 +4,6 @@ import Spinner from "../layout/Spinner";
 import api from "../../api/api";
 import { NotFound } from "../layout/NotFound";
 import { useAuth } from "../../context/AuthContext";
-import { useUsers } from "../../context/UsersContext";
 
 const Profile = () => {
 
