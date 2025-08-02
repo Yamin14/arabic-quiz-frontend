@@ -43,8 +43,6 @@ export const UsersProvider = ({ children }: Props) => {
             })
             if (response.status === 200) {
                 setUsers(response.data);
-            } else {
-                setUsers([]);
             }
         } catch (error) {
             console.error('Error fetching user:', error);
