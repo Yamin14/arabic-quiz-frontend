@@ -38,7 +38,8 @@ export const UsersProvider = ({ children }: Props) => {
             setLoading(true);
             const response = await api.get('/api/users', {
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`,
+                    'Cache-Control': 'no-cache'
                 }
             })
             if (response.status === 200) {
