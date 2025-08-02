@@ -54,7 +54,6 @@ export const AuthProvider = ({ children }: Props) => {
             } catch (error) {
                 console.error('Error fetching user:', error);
                 setUser(null);
-                setToken('0');
             } finally {
                 setLoading(false);
             }
@@ -69,7 +68,8 @@ export const AuthProvider = ({ children }: Props) => {
             const response = await api.post('/api/users', formData);
 
             if (response.status === 200) {
-                setUser(response.data);
+                setUser(response.data.user);
+                setToken(response.data.token);
                 return true;
             } else {
                 setUser(null);
@@ -95,7 +95,8 @@ export const AuthProvider = ({ children }: Props) => {
             const response = await api.post('/auth/login', credentials);
 
             if (response.status === 200) {
-                setUser(response.data);
+                setUser(response.data.user);
+                setToken(response.data.token);
                 return true;
             } else {
                 setUser(null);
