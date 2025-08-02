@@ -42,9 +42,8 @@ export const UsersProvider = ({ children }: Props) => {
                     'Cache-Control': 'no-cache'
                 }
             })
-            if (response.status === 200) {
-                setUsers(response.data);
-            }
+            setUsers(response.data);
+            
         } catch (error) {
             console.error('Error fetching user:', error);
             setUsers([]);
