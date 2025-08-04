@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useQuiz } from "../../context/QuizContext"
 import Spinner from "../layout/Spinner";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import { NotFound } from "../layout/NotFound";
 import { useAuth } from "../../context/AuthContext";
 import type { QuizResult } from "../../types/Quiz";
@@ -9,7 +9,6 @@ import type { QuizResult } from "../../types/Quiz";
 const Quiz = () => {
 
     const { quiz, loading: quizLoading, fetchQuiz, submitQuiz } = useQuiz();
-    const { category } = useParams();
     const { user, loading: userLoading } = useAuth();
     const [index, setIndex] = useState(0);
     const [checked, setChecked] = useState(false);
@@ -25,7 +24,7 @@ const Quiz = () => {
 
     //fetch quiz
     useEffect(() => {
-        fetchQuiz(user?.level ?? 1, category ?? 'Islamic');
+        fetchQuiz(user?.level ?? 1);
     }, []);
 
     //timer
@@ -132,7 +131,7 @@ const Quiz = () => {
                 <div className="quiz-header">
                     <h2 className="text-2xl font-bold">
                         <i className="fas fa-question-circle"></i>{' '}
-                        {category} Quiz
+                        Arabic Quiz
                     </h2>
                     <p className="text-lg">
                         <i className="fas fa-layer-group"></i>{' '}

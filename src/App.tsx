@@ -36,7 +36,7 @@ function App() {
                   <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                   <Route path="/profile/:id" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
                   <Route path="/profile/edit/:id" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
-                  <Route path="/quiz/:category" element={<ProtectedRoute><Quiz /></ProtectedRoute>} />
+                  <Route path="/quiz" element={<ProtectedRoute><Quiz /></ProtectedRoute>} />
                   <Route path="/quiz/result" element={<ProtectedRoute><Result /></ProtectedRoute>} />
 
                   {/* Guest Routes */}

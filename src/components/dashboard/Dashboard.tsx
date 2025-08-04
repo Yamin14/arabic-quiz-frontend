@@ -2,14 +2,18 @@ import { Link } from "react-router";
 import { useUsers } from "../../context/UsersContext"
 import Spinner from "../layout/Spinner";
 import { useEffect } from "react";
+import { useAuth } from "../../context/AuthContext";
 
 const Dashboard = () => {
 
+  const { user } = useAuth();
   const { users, loading, fetchUsers } = useUsers();
 
   useEffect(() => {
-    fetchUsers();
-  }, [])
+    if (user) {
+      fetchUsers();
+    }
+  }, [user])
 
   if (loading) {
     return <Spinner />

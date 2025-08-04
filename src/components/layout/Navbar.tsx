@@ -23,7 +23,7 @@ const Navbar = () => {
                     <div className="navbar-nav">
                         {user ? (<>
                             <Link to={`/profile/${user.id}`} className="btn btn-white btn-sm">
-                                {user.name}
+                                {user.name.split(" ")[0]}
                             </Link>
                             <button className="btn btn-white btn-sm"
                                 onClick={() => handleLogout()}>

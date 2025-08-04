@@ -23,7 +23,7 @@ interface Question {
 const QuizContext = createContext<{
     quiz: Question[],
     loading: boolean,
-    fetchQuiz: (level: number, category: string) => void,
+    fetchQuiz: (level: number) => void,
     submitQuiz: (score: number) => Promise<boolean | undefined>;
 } | undefined>(undefined);
 
@@ -35,10 +35,10 @@ export const QuizProvider = ({ children }: Props) => {
     const { token } = useAuth();
 
     //fetch quiz
-    const fetchQuiz = async (level: number, category: string) => {
+    const fetchQuiz = async (level: number) => {
         try {
             setLoading(true);
-            const response = await api.get(`/api/quiz?level=${level}&category=${category}`, {
+            const response = await api.get(`/api/quiz?level=${level}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
