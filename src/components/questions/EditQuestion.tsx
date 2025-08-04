@@ -1,5 +1,122 @@
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router"
+import Spinner from "../layout/Spinner";
+import api from "../../api/api";
+import { useAuth } from "../../context/AuthContext";
+import { NotFound } from "../layout/NotFound";
 
 const EditQuestion = () => {
+    //get id
+    const { id } = useParams();
+    const { token } = useAuth();
+    const nav = useNavigate();
+
+    //state
+    const [loading, setLoading] = useState(true);
+    const [question, setQuestion] = useState<{
+        text: string,
+        options: { text: string, isCorrect: boolean }[],
+        category: string,
+        level: number
+    }>();
+
+    //fetch question
+    useEffect(() => {
+        const fetchQuestion = async () => {
+            setLoading(true);
+            try {
+                const response = await api.get(`/api/questions/${id}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+                setQuestion(response.data);
+
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchQuestion()
+    }, []);
+
+    //handle text and level change
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setQuestion((prev) => {
+            if (!prev) return prev;
+            return {
+                ...prev,
+                [name]: name === 'level' ? parseInt(value) : value
+            };
+        });
+    }
+
+    //handle select change
+    const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setQuestion((prev) => {
+            if (!prev) return prev;
+            return {
+                ...prev,
+                [name]: value
+            };
+        });
+    }
+
+    //handle options change
+    const handleOptionsChange = (index: number, field: 'text' | 'isCorrect', value: string | boolean) => {
+        if (!question) return;
+        const updatedOptions = [...question.options];
+        updatedOptions[index] = {
+            ...updatedOptions[index],
+            [field]: value
+        }
+        if (field === 'isCorrect') {
+            updatedOptions.map((option, i) => {
+                if (i !== index) {
+                    option.isCorrect = false;
+                }
+            })
+        }
+
+        setQuestion((prev) => {
+            if (!prev) return prev;
+            return {
+                ...prev,
+                options: updatedOptions
+            }
+        })
+    }
+
+    //handle submit
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            await api.put(`/api/questions/${id}`, question, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            nav('/admin/questions');   
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    //return
+    if (loading) {
+        return <Spinner />
+    }
+
+    if (!question) {
+        return <NotFound />
+    }
+
     return (
         <div id="editQuestionPage" className="page">
             <div className="form-container">
@@ -7,89 +124,58 @@ const EditQuestion = () => {
                     <i className="fas fa-edit"></i>
                     Edit Question
                 </h2>
-                <form>
+                <form onSubmit={handleSubmit}>
+                    {/* Question Text */}
                     <div className="form-group">
                         <label className="label">
                             <i className="fas fa-question-circle"></i>
                             Question Text
                         </label>
-                        <textarea id="editQuestionText" className="textarea">ما معنى كلمة "كتاب"؟</textarea>
+                        <input type="text" onChange={handleInputChange} className="input arabic" value={question.text} name="text" />
                     </div>
 
-                    <div className="form-group">
-                        <label className="label">
-                            <i className="fas fa-list"></i>
-                            Option 1
-                        </label>
-                        <input type="text" id="editOption1" className="input" value="House" />
-                    </div>
+                    {/* Options */}
+                    {question.options.map((option, index) => {
+                        return (
+                            <div className="form-group" key={index}>
+                                <label className="label">
+                                    <i className="fas fa-list"></i>
+                                    Option {index + 1}
+                                </label>
+                                <input type="text" className="input arabic" value={option.text} onChange={(e) => handleOptionsChange(index, 'text', e.target.value)} />
 
-                    <div className="form-group">
-                        <label className="label">
-                            <i className="fas fa-list"></i>
-                            Option 2
-                        </label>
-                        <input type="text" id="editOption2" className="input" value="Book" />
-                    </div>
+                                <input type="radio" className="radio" value='Is Correct' checked={option.isCorrect} onChange={(e) => handleOptionsChange(index, 'isCorrect', e.target.checked)} />
+                                <label className="text-sm"> Is Correct</label>
+                            </div>
+                        )
+                    })}
 
-                    <div className="form-group">
-                        <label className="label">
-                            <i className="fas fa-list"></i>
-                            Option 3
-                        </label>
-                        <input type="text" id="editOption3" className="input" value="Water" />
-                    </div>
-
-                    <div className="form-group">
-                        <label className="label">
-                            <i className="fas fa-list"></i>
-                            Option 4
-                        </label>
-                        <input type="text" id="editOption4" className="input" value="Car" />
-                    </div>
-
-                    <div className="form-group">
-                        <label className="label">
-                            <i className="fas fa-check-circle"></i>
-                            Correct Answer
-                        </label>
-                        <select id="editCorrectAnswer" className="select">
-                            <option value="1">Option 1</option>
-                            <option value="2" selected>Option 2</option>
-                            <option value="3">Option 3</option>
-                            <option value="4">Option 4</option>
-                        </select>
-                    </div>
-
+                    {/* Category */}
                     <div className="form-group">
                         <label className="label">
                             <i className="fas fa-tags"></i>
                             Category
                         </label>
-                        <select id="editCategory" className="select">
-                            <option value="vocabulary" selected>Vocabulary</option>
-                            <option value="grammar">Grammar</option>
-                            <option value="reading">Reading</option>
+                        <select defaultValue={question.category} onChange={handleSelectChange} name="category" className="select">
+                            <option value="Vocabulary">Vocabulary</option>
+                            <option value="Grammar">Grammar</option>
                         </select>
                     </div>
 
+                    {/* Level */}
                     <div className="form-group">
                         <label className="label">
                             <i className="fas fa-layer-group"></i>
                             Level
                         </label>
-                        <select id="editLevel" className="select">
-                            <option value="beginner" selected>Beginner</option>
-                            <option value="intermediate">Intermediate</option>
-                            <option value="advanced">Advanced</option>
-                        </select>
+                        <input type="number" onChange={handleInputChange} className="input" value={question.level} name='level' />
                     </div>
 
                     <div className="flex justify-between">
-                        <button type="button" className="btn btn-outline">
+                        <Link to='/admin/questions' type="button" className="btn btn-outline">
                             <i className="fas fa-times"></i>
                             Cancel
-                        </button>
+                        </Link>
                         <button type="submit" className="btn btn-primary">
                             <i className="fas fa-save"></i>
                             Update Question

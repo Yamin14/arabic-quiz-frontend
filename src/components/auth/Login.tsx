@@ -13,6 +13,9 @@ const Login = () => {
     const { login } = useAuth();
     const nav = useNavigate();
 
+    //show password
+    const [showPassword, setShowPassword] = useState(false);
+
     //handle input change
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -25,7 +28,7 @@ const Login = () => {
     //handle submit
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        login({email, password})
+        login({ email, password })
             .then(() => {
                 nav('/')
             });
@@ -52,7 +55,13 @@ const Login = () => {
                             <i className="fas fa-lock"></i>{' '}
                             Password
                         </label>
-                        <input type="password" name='password' value={password} onChange={handleInputChange} className="input" placeholder="Enter your password" />
+                        <input type={showPassword ? 'text' : "password"} name='password' value={password} onChange={handleInputChange} className="input" placeholder="Enter your password" />
+                        <label className="text-sm mt-2">
+                            <input 
+                                type="checkbox"
+                                checked={showPassword} 
+                                onChange={() => setShowPassword(!showPassword)}/> Show Password
+                        </label>
                     </div>
                     <button type="submit" className="btn btn-primary w-full mb-3">
                         <i className="fas fa-sign-in-alt"></i>

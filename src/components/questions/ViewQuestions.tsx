@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import api from "../../api/api"
 import { useAuth } from "../../context/AuthContext"
 import Spinner from "../layout/Spinner";
+import { Link } from "react-router";
 
 const ViewQuestions = () => {
 
@@ -42,15 +43,13 @@ const ViewQuestions = () => {
     const deleteQuestion = async (id: string) => {
         setLoading(true);
         try {
-            const response = await api.delete(`/api/questions/${id}`, {
+            await api.delete(`/api/questions/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            if (response.status === 200) {
-                const updatedQuestions = (questions ?? []).filter(q => q._id != id);
-                setQuestions(updatedQuestions);
-            }
+            const updatedQuestions = (questions ?? []).filter(q => q._id != id);
+            setQuestions(updatedQuestions);
         } catch (error) {
             console.log(error);
         } finally {
@@ -72,10 +71,10 @@ const ViewQuestions = () => {
                             <i className="fas fa-list"></i>
                             All Questions
                         </h2>
-                        <button className="btn btn-primary btn-sm">
+                        <Link to='/admin/questions/add' className="btn btn-primary btn-sm">
                             <i className="fas fa-plus"></i>
                             Add New Question
-                        </button>
+                        </Link>
                     </div>
                     <div className="card-body">
                         {questions && questions.map((question, index) => {
@@ -89,11 +88,11 @@ const ViewQuestions = () => {
                                             </span>
                                         </div>
                                         <div className="question-actions">
-                                            <button className="btn btn-primary btn-sm">
+                                            <Link to={`/admin/questions/edit/${question._id}`} className="btn btn-primary btn-sm">
                                                 <i className="fas fa-edit"></i>
                                                 Edit
-                                            </button>
-                                            <button 
+                                            </Link>
+                                            <button
                                                 onClick={() => deleteQuestion(question._id)}
                                                 className="btn btn-danger btn-sm">
                                                 <i className="fas fa-trash"></i>

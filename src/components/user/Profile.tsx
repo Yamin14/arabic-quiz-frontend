@@ -4,6 +4,7 @@ import Spinner from "../layout/Spinner";
 import api from "../../api/api";
 import { NotFound } from "../layout/NotFound";
 import { useAuth } from "../../context/AuthContext";
+import { useUsers } from "../../context/UsersContext";
 
 const Profile = () => {
 
@@ -30,7 +31,7 @@ const Profile = () => {
                 setLoading(true);
                 const response = await api.get(`/api/users/${id}`);
                 setProfile(response.data)
-                setError(false);           
+                setError(false);
             } catch (error) {
                 console.log("Error fetching profile: ", error);
                 setError(true);
@@ -41,6 +42,14 @@ const Profile = () => {
         fetchProfile();
     }, [id, user])
 
+    //delete
+    const { deleteUser } = useUsers();
+    const handleDelete = (id: string) => {
+        deleteUser(id);
+        logout();
+    }
+
+    //return
     if (loading) {
         return <Spinner />
     }
@@ -104,11 +113,24 @@ const Profile = () => {
                                 <span className="field-value">{profile.quizzesTaken}</span>
                             </div>
                         </div>
+
+                        {user && user.role === 'admin' ? (
+                            <div className="text-center">
+                                <Link to='/admin' className="btn btn-primary">
+                                    Admin Page
+                                </Link>
+                            </div>
+                        ) : null}
+
                         {user && user.id == id ? (<div className="text-center">
                             <Link to={`/profile/edit/${id}`} className="btn btn-primary">
                                 <i className="fas fa-edit"></i>
                                 Edit
                             </Link>
+                            <button className="btn btn-danger" onClick={() => handleDelete(id)}>
+                                <i className="fas fa-trash"></i>
+                                Delete
+                            </button>
                             <button className="btn btn-outline" onClick={() => logout()}>
                                 <i className="fas fa-sign-out-alt"></i>
                                 Logout

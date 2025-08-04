@@ -18,6 +18,9 @@ import GuestRoute from './components/auth/GuestRoute'
 import { UsersProvider } from './context/UsersContext'
 import AdminRoute from './components/auth/AdminRoute'
 import { QuizProvider } from './context/QuizContext'
+import EditQuestion from './components/questions/EditQuestion'
+import AddQuestion from './components/questions/AddQuestion'
+import AdminPage from './components/admin/AdminPage'
 
 function App() {
 
@@ -41,9 +44,12 @@ function App() {
                   <Route path="/register" element={<GuestRoute><Register /></GuestRoute>} />
                   
                   {/* Admin Routes */}
+                  <Route path="/admin" element={<AdminRoute><AdminPage /></AdminRoute>} />
                   <Route path="/admin/users" element={<AdminRoute><Users /></AdminRoute>} />
                   <Route path="/admin/questions" element={<AdminRoute><ViewQuestions /></AdminRoute>} />
-                  
+                  <Route path="/admin/questions/edit/:id" element={<AdminRoute><EditQuestion /></AdminRoute>} />
+                  <Route path="/admin/questions/add" element={<AdminRoute><AddQuestion /></AdminRoute>} />
+
                   {/* Not found */}
                   <Route path='*' element={<NotFound />} />
                 </Route>

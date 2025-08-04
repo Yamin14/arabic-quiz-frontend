@@ -15,6 +15,9 @@ const Register = () => {
     const nav = useNavigate();
     const { register } = useAuth();
 
+    //show password
+    const [showPassword, setShowPassword] = useState(false);
+
     //handle input change
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -69,7 +72,13 @@ const Register = () => {
                             <i className="fas fa-lock"></i>{' '}
                             Password
                         </label>
-                        <input required type="password" value={password} name='password' className="input" onChange={handleInputChange} placeholder="Create a password" />
+                        <input required type={showPassword ? 'text' : "password"} value={password} name='password' className="input" onChange={handleInputChange} placeholder="Create a password" />
+                        <label className="text-sm mt-2">
+                            <input 
+                                type="checkbox"
+                                checked={showPassword} 
+                                onChange={() => setShowPassword(!showPassword)}/> Show Password
+                        </label>
                     </div>
                     <div className="form-group">
                         <label className="label">
