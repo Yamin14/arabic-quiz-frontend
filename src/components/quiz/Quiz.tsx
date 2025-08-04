@@ -24,8 +24,10 @@ const Quiz = () => {
 
     //fetch quiz
     useEffect(() => {
-        fetchQuiz(user?.level ?? 1);
-    }, []);
+        if (user) {
+            fetchQuiz(user.level);
+        }
+    }, [user]);
 
     //timer
     const [timer, setTimer] = useState(180);
