@@ -61,9 +61,9 @@ const Dashboard = () => {
 
             {/* Quiz Links */}
             <div className="text-center mt-4">
-              <Link to='/quiz/Vocabulary' className="btn btn-primary btn-lg">
+              <Link to='/quiz' className="btn btn-primary btn-lg">
                 <i className="fas fa-play"></i>
-                Take Vocabulary Quiz
+                Take Quiz
               </Link>
             </div>
           </div>
